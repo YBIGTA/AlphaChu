@@ -2,15 +2,30 @@
 This file will run pikachu volleyball directly
 You need to install wine if you use OSX or Linux
 """
+import os
 import platform
 import subprocess
+import time
 
-os_name = platform.system()
-command = 'pika.exe'
+class Pika:
+    """
+    Class for control operations
+    """
+    # TODO: Send keyboard input to subprocess
+    def __init__(self):
+        self.os_name = platform.system()
+        self.command = "pika.exe"
+        if self.os_name != "Windows":
+            self.command = "wine " + self.command
+        self.process = None
+    def run(self):
+        self.process = subprocess.Popen(self.command.split(), preexec_fn=os.setsid)
 
-if os_name != "Windows":
-    command = "wine " + command
-    process = subprocess.call(command, shell=True)
-else:
-    process = subprocess.call(command)
+    def terminate(self):
+        self.process.terminate()
 
+if __name__ == '__main__':
+    pika = Pika()
+    pika.run()
+    time.sleep(10)
+    pika.terminate()

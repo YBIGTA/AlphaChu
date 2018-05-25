@@ -1,6 +1,6 @@
 # Gym-alphachu
 
-try to make default stucture of gym env.
+try to make default structure of gym env.
 
 According to official documentation of openai gym, mimic the default structures of environment.
 
