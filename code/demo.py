@@ -1,7 +1,6 @@
 import gym
-import universe
 import random
-
+from gym import Env
 def main():
 
     # init environment
