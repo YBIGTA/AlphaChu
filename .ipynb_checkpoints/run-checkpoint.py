@@ -18,7 +18,6 @@ class Pika:
         if self.os_name != "Windows":
             self.command = "wine " + self.command
         self.process = None
-        
     def run(self):
         self.process = subprocess.Popen(self.command.split(), preexec_fn=os.setsid)
 
