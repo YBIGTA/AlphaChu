@@ -18,11 +18,17 @@ class MemoryReader:
         buffer = ctypes.c_char_p(b"0")
         
         # read com score
-        self.read_process_memory(process_handle, base_addr + 0x448f1d0, buffer, len(buffer.value), ctypes.byref(ctypes.c_ulong(0)))
+        self.read_process_memory(process_handle, base_addr+0x448f1d0, buffer, len(buffer.value), ctypes.byref(ctypes.c_ulong(0)))
         com_score = int.from_bytes(buffer.value, byteorder='little')
         
         # read my score
-        self.read_process_memory(process_handle, base_addr + 0x448f1d4, buffer, len(buffer.value), ctypes.byref(ctypes.c_ulong(0)))
+        self.read_process_memory(process_handle, base_addr+0x448f1d4, buffer, len(buffer.value), ctypes.byref(ctypes.c_ulong(0)))
         my_score = int.from_bytes(buffer.value, byteorder='little')
         
         return com_score, my_score
+    
+    def is_over(self):
+        # read flag
+        self.read_process_memory(process_handle, base_addr+0x448f1d4+8, buffer, len(buffer.value), ctypes.byref(ctypes.c_ulong(0)))
+        flag = int.from_bytes(buffer.value, byteorder='little')
+        return flag

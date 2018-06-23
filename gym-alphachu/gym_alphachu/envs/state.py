@@ -43,4 +43,4 @@ class State:
         return img
     
     def is_over(self):
-        raise NotImplementedError
+        return self.memory_reader.is_over()
