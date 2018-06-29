@@ -49,7 +49,19 @@ class Action:
             win32api.keybd_event(self.key_map[0], 0, win32con.KEYEVENTF_KEYUP, 0)
             time.sleep(self.interval_time)
             return
-
+        
+        # key_num 6 : Up & Spike
+        elif key_num == 6:
+            win32api.keybd_event(self.key_map[1], 0, 0, 0)
+            time.sleep(self.interval_time)
+            win32api.keybd_event(self.key_map[0], 0, 0, 0)
+            time.sleep(self.interval_time)
+            win32api.keybd_event(self.key_map[1], 0, win32con.KEYEVENTF_KEYUP, 0)
+            time.sleep(self.interval_time)
+            win32api.keybd_event(self.key_map[0], 0, win32con.KEYEVENTF_KEYUP, 0)
+            time.sleep(self.interval_time)
+            return
+        
         # key_num 7 : Right & Spike
         elif key_num == 7:
             win32api.keybd_event(self.key_map[4], 0, 0, 0)
