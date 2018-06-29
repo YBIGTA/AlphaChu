@@ -7,7 +7,7 @@ class Action:
     def __init__(self, window_name, interval_time):
         self.shell = client.Dispatch('WScript.Shell')
         self.window_name = window_name
-        self.interval_time = 0
+        self.interval_time = interval_time
         self.key_map = {0: 0x0D, # enter
                         1: 0x26, # up arrow
                         2: 0x28, # down arrow
