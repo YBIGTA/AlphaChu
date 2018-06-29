@@ -20,7 +20,7 @@ class Action:
         :param key_num: 입력 키의 조합
             0: SPIKE
             1: UP
-            2: DOWN
+            2: NO ACTION
             3: LEFT
             4: RIGHT
             5: LEFT & SPIKE
@@ -29,13 +29,15 @@ class Action:
             8: DOWN & SPIKE
             9: UP & LEFT & SPIKE
             10: UP & RIGHT & SPIKE
+            11: DOWN & (LEFT RIGHT) & SPIKE
         """
         # Activate pika window
         self.shell.AppActivate(self.window_name)
 
         # 하나의 키일 때
-        if key_num < 5:
+        if key_num < 5 and key_num != 2:
             win32api.keybd_event(self.key_map[key_num], 0, 0, 0)
+            print(self.key_map[key_num])
             time.sleep(self.interval_time)
             win32api.keybd_event(self.key_map[key_num], 0, win32con.KEYEVENTF_KEYUP, 0)
             time.sleep(self.interval_time)
@@ -80,7 +82,7 @@ class Action:
         # key_num 8 : Down & Spike
         elif key_num == 8:
             win32api.keybd_event(self.key_map[2], 0, 0, 0)
-            time.sleep(self.interval_time)
+            #time.sleep(self.interval_time)
             win32api.keybd_event(self.key_map[0], 0, 0, 0)
             time.sleep(self.interval_time)
             win32api.keybd_event(self.key_map[2], 0, win32con.KEYEVENTF_KEYUP, 0)
@@ -89,43 +91,62 @@ class Action:
             time.sleep(self.interval_time)
             return
 
-        # key_num 9 : Up & Left & Spike
+        # key_num 9 : Left & Up & Spike
         elif key_num == 9:
-            win32api.keybd_event(self.key_map[1], 0, 0, 0)
-            time.sleep(self.interval_time)
             win32api.keybd_event(self.key_map[3], 0, 0, 0)
-            time.sleep(self.interval_time)
+            win32api.keybd_event(self.key_map[1], 0, 0, 0)
+            #time.sleep(self.interval_time)
+            
+            #time.sleep(self.interval_time)
             win32api.keybd_event(self.key_map[0], 0, 0, 0)
             time.sleep(self.interval_time)
             win32api.keybd_event(self.key_map[1], 0, win32con.KEYEVENTF_KEYUP, 0)
-            time.sleep(self.interval_time)
+            #time.sleep(self.interval_time)
             win32api.keybd_event(self.key_map[3], 0, win32con.KEYEVENTF_KEYUP, 0)
-            time.sleep(self.interval_time)
+            #time.sleep(self.interval_time)
             win32api.keybd_event(self.key_map[0], 0, win32con.KEYEVENTF_KEYUP, 0)
-            time.sleep(self.interval_time)
+            #time.sleep(self.interval_time)
             return
 
-        # key_num 10 : Up & Right & Spike
-        elif key_num == 9:
-            win32api.keybd_event(self.key_map[1], 0, 0, 0)
-            time.sleep(self.interval_time)
+        # key_num 10 : Right & Up & Spike
+        elif key_num == 10:
             win32api.keybd_event(self.key_map[4], 0, 0, 0)
-            time.sleep(self.interval_time)
+            win32api.keybd_event(self.key_map[1], 0, 0, 0)
+            #time.sleep(self.interval_time)
+            
+            #time.sleep(self.interval_time)
             win32api.keybd_event(self.key_map[0], 0, 0, 0)
             time.sleep(self.interval_time)
             win32api.keybd_event(self.key_map[1], 0, win32con.KEYEVENTF_KEYUP, 0)
+            #time.sleep(self.interval_time)
+            win32api.keybd_event(self.key_map[4], 0, win32con.KEYEVENTF_KEYUP, 0)
+            #time.sleep(self.interval_time)
+            win32api.keybd_event(self.key_map[0], 0, win32con.KEYEVENTF_KEYUP, 0)
+            #time.sleep(self.interval_time)
+            return
+
+        #11: DOWN & (LEFT RIGHT) & SPIKE
+        elif key_num == 11:
+            win32api.keybd_event(self.key_map[4], 0, 0, 0)
+            win32api.keybd_event(self.key_map[2], 0, 0, 0)
+            #time.sleep(self.interval_time)
+            
+            #time.sleep(self.interval_time)
+            win32api.keybd_event(self.key_map[0], 0, 0, 0)
             time.sleep(self.interval_time)
             win32api.keybd_event(self.key_map[4], 0, win32con.KEYEVENTF_KEYUP, 0)
-            time.sleep(self.interval_time)
+            #time.sleep(self.interval_time)
+            win32api.keybd_event(self.key_map[2], 0, win32con.KEYEVENTF_KEYUP, 0)
+            #time.sleep(self.interval_time)
             win32api.keybd_event(self.key_map[0], 0, win32con.KEYEVENTF_KEYUP, 0)
-            time.sleep(self.interval_time)
+            #time.sleep(self.interval_time)
             return
 
     def start_game(self):
         # Activate pika window
         self.shell.AppActivate(self.window_name)
         time.sleep(0.2)
-        for _ in range(3):
+        for _ in range(5):
             win32api.keybd_event(self.key_map[0], 0, 0, 0) # enter down
             time.sleep(0.1)
             win32api.keybd_event(self.key_map[0], 0, win32con.KEYEVENTF_KEYUP, 0) # enter down
