@@ -26,7 +26,7 @@ class Action:
             5: LEFT & SPIKE
             6: UP & SPIKE
             7: RIGHT & SPIKE
-            8: DOWN & SPIKE
+            8: DOWN & SPIKEf
             9: UP & LEFT & SPIKE
             10: UP & RIGHT & SPIKE
             11: DOWN & (LEFT RIGHT) & SPIKE
@@ -37,7 +37,6 @@ class Action:
         # 하나의 키일 때
         if key_num < 5 and key_num != 2:
             win32api.keybd_event(self.key_map[key_num], 0, 0, 0)
-            print(self.key_map[key_num])
             time.sleep(self.interval_time)
             win32api.keybd_event(self.key_map[key_num], 0, win32con.KEYEVENTF_KEYUP, 0)
             time.sleep(self.interval_time)

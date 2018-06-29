@@ -45,9 +45,6 @@ class PikaEnv(gym.Env):
     def reset(self):
         self.reset_game()
         time.sleep(1)
-        while True:
-            if self.state.is_over() == 0:
-                break
         return self.state.get_state()
     
     def seed(self, seed=None):

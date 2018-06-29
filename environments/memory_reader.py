@@ -16,7 +16,7 @@ class MemoryReader:
     buffer_size = len(buffer.value)
     bytes_read = ctypes.c_ulong(0)
     
-    score_address = 0x04280EAC
+    score_address = 0x02260EAC
     
     def __init__(self, handler, base_address):
         self.handler = handler

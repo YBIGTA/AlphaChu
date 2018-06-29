@@ -15,8 +15,9 @@ class State:
         
         self.handler = handler
         left, top, right, bottom = win32gui.GetWindowRect(self.handler)
-        self.bbox = (left+40, top+130, right+150, bottom+110)
-        # self.bbox = (left, top+, right, bottom)
+        self.bbox = (left, top+80, right-30, bottom+50)
+        # self.bbox = (left+40, top+130, right+150, bottom+110)
+        # self.bbox = (left, top, right, bottom)
         self.image_size = image_size
         self.memory_reader = MemoryReader(self.handler, base_address)
         
