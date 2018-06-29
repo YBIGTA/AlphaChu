@@ -1,5 +1,6 @@
 import numpy as np
 import os
+import time
 import gym
 from gym import error, spaces
 from gym import utils
@@ -32,17 +33,23 @@ class PikaEnv(gym.Env):
                            config.base_address, 
                            config.image_size)
         self.state_buffer = deque()
-        for _ in range(3):
-            self.state_buffer.append(np.zeros((80,80)))
+        for _ in range(2):
+            self.state_buffer.append(np.zeros(config.image_size))
         self.com_score = 0
         self.my_score = 0
         self.action = Action(self.window_name, config.interval_time)
-        
+        self.actions = 12
         # rendering
         self.viewer = None
         
-
-        
+    def reset(self):
+        self.reset_game()
+        time.sleep(1)
+        while True:
+            if self.state.is_over() == 0:
+                break
+        return self.state.get_state()
+    
     def seed(self, seed=None):
         self.np_random, seed1 = seeding.np_random(seed)
         # Derive a random seed. This gets passed as a uint, but gets
@@ -68,22 +75,23 @@ class PikaEnv(gym.Env):
         num_steps = np.random.randint(self.frame_skip[0], self.frame_skip[1])
 
         # do action and get reward
-        for _ in range(num_steps):
+        for _ in range(1):
             self.action.send_key(key_num)
             reward += self.get_reward()
 
         observation = self.state.get_state()
 
         previous_frames = np.array(self.state_buffer)
-        s_t1 = np.empty((4, 80, 80))
-        s_t1[:3, :] = previous_frames
-        s_t1[3] = observation
+        s_t1 = np.empty((3, 84, 84))
+        s_t1[:2, :] = previous_frames
+        s_t1[2, :] = observation
 
         # Pop the oldest frame, add the current frame to the queue
         self.state_buffer.popleft()
         self.state_buffer.append(observation)
-
-        return s_t1, reward, False, {"com_score": self.com_score, 
+        
+        flag = self.state.is_over()
+        return np.moveaxis(s_t1, 0, -1), reward, flag, {"com_score": self.com_score, 
                                                            "my_score": self.my_score}
     
     def render(self, mode='human'):
