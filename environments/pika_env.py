@@ -10,6 +10,7 @@ from gym.envs.registration import register
 import subprocess
 import os
 import win32gui
+from collections import deque
 
 from .helper import open_game, get_window
 from .state import State
@@ -30,12 +31,17 @@ class PikaEnv(gym.Env):
         self.state = State(self.handler, 
                            config.base_address, 
                            config.image_size)
+        self.state_buffer = deque()
+        for _ in range(3):
+            self.state_buffer.append(np.zeros((80,80)))
         self.com_score = 0
         self.my_score = 0
         self.action = Action(self.window_name, config.interval_time)
         
         # rendering
         self.viewer = None
+        
+
         
     def seed(self, seed=None):
         self.np_random, seed1 = seeding.np_random(seed)
@@ -67,7 +73,17 @@ class PikaEnv(gym.Env):
             reward += self.get_reward()
 
         observation = self.state.get_state()
-        return observation, reward, False, {"com_score": self.com_score, 
+
+        previous_frames = np.array(self.state_buffer)
+        s_t1 = np.empty((4, 80, 80))
+        s_t1[:3, :] = previous_frames
+        s_t1[3] = observation
+
+        # Pop the oldest frame, add the current frame to the queue
+        self.state_buffer.popleft()
+        self.state_buffer.append(observation)
+
+        return s_t1, reward, False, {"com_score": self.com_score, 
                                                            "my_score": self.my_score}
     
     def render(self, mode='human'):

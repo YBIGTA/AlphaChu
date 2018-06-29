@@ -30,11 +30,11 @@ class MemoryReader:
         is_start = False
         
         # read com score
-        self.read_process_memory(self.process_handle, 0x023F0EAC, self.buffer, self.buffer_size, ctypes.byref(self.bytes_read))
+        self.read_process_memory(self.process_handle, 0x04590DD4, self.buffer, self.buffer_size, ctypes.byref(self.bytes_read))
         com_score = int.from_bytes(self.buffer.value, byteorder='little')
         
         # read my score
-        self.read_process_memory(self.process_handle, 0x023F0EAC+4, self.buffer, self.buffer_size, ctypes.byref(self.bytes_read))
+        self.read_process_memory(self.process_handle, 0x04590DD4+4, self.buffer, self.buffer_size, ctypes.byref(self.bytes_read))
         my_score = int.from_bytes(self.buffer.value, byteorder='little')
                 
         return com_score, my_score
@@ -42,6 +42,6 @@ class MemoryReader:
     def is_over(self):
         # read flag
         # 진행상태FLAG 0:(최초게임시작)공떨어지기전 1: 공떨어지기전 2:게임중 3:공이 땅에 닿임 A: 메뉴
-        self.read_process_memory(self.process_handle, 0x023F0EAC+4+8, self.buffer, self.buffer_size, ctypes.byref(self.bytes_read))
+        self.read_process_memory(self.process_handle, 0x04590DD4+4+8, self.buffer, self.buffer_size, ctypes.byref(self.bytes_read))
         flag = int.from_bytes(self.buffer.value, byteorder='little')
         return flag
