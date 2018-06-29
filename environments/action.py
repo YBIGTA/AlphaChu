@@ -36,6 +36,9 @@ class Action:
         # 하나의 키일 때
         if key_num < 5:
             win32api.keybd_event(self.key_map[key_num], 0, 0, 0)
+            time.sleep(self.interval_time)
+            win32api.keybd_event(self.key_map[key_num], 0, win32con.KEYEVENTF_KEYUP, 0)
+            time.sleep(self.interval_time)
             return
 
         # key_num 5 : Left & Spike
