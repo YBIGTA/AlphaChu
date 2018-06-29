@@ -155,7 +155,6 @@ class Action:
     def reset_game(self):
         # Activate pika window
         self.shell.AppActivate(self.window_name)
-        time.sleep(0.5)
         win32api.keybd_event(0x12, 0, 0, 0) # alt
         time.sleep(self.interval_time)
         win32api.keybd_event(0x12, 0, win32con.KEYEVENTF_KEYUP, 0) # alt

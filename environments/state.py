@@ -15,17 +15,27 @@ class State:
         
         self.handler = handler
         left, top, right, bottom = win32gui.GetWindowRect(self.handler)
-        self.bbox = (left, top+80, right-30, bottom+50)
+        self.bbox = (left+5, top+50, right-5, bottom-10)
         # self.bbox = (left+40, top+130, right+150, bottom+110)
         # self.bbox = (left, top, right, bottom)
         self.image_size = image_size
         self.memory_reader = MemoryReader(self.handler, base_address)
         
+    def img_filtering(self, img):
+        ball_index = np.logical_and(img[:,:,2]==0, np.logical_and(img[:,:,1]==0, img[:,:,0]==127))
+        picka_index = np.logical_and(img[:,:,2]==0, np.logical_and(img[:,:,1]==255, img[:,:,0]==255))
+        img_filterd = img
+        img_filterd[np.logical_not(np.logical_or(ball_index, picka_index))] = 0
+        img_filterd[np.logical_or(ball_index, picka_index)]=255
+        return img_filterd
+    
     def get_state(self, gray=True):
         """Get image array of state
         :param gray: if true, get grayscale image (default True)
         """
         img = ImageGrab.grab(self.bbox)
+        img = self.img_filtering(np.array(img))
+        img = Image.fromarray(img)
         img = img.resize(self.image_size, Image.ANTIALIAS)
         if gray:
             img = img.convert("L")
