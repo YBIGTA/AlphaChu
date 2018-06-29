@@ -1,3 +1,6 @@
+import subprocess
+import win32gui
+
 def open_game():
     process = subprocess.Popen("pika.exe")
 
@@ -9,13 +12,15 @@ def get_window():
             print("Found window : {}".format(window))
             address = eval(window.split(":")[0])
             window_name = eval(window.split(":")[1])
+            if " ( PAUSED! )" in window_name:
+                window_name = window_name.replace(" ( PAUSED! )", "")
             handler = win32gui.FindWindowEx(0, 0, None, window_name)
-    return address, window_name, handler
+            return address, window_name, handler
 
 def callback(handler, strings):
     if win32gui.IsWindowVisible(handler):
         window_title = win32gui.GetWindowText(handler)
         left, top, right, bottom = win32gui.GetWindowRect(handler)
         if window_title and right-left and bottom-top:
-            string.append("0x{:08x}: '{}'".format(handler, window_title))
+            strings.append("0x{:08x}: '{}'".format(handler, window_title))
     return True

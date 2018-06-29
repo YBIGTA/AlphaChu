@@ -22,19 +22,17 @@ class PikaEnv(gym.Env):
         # define hparams
         self.frame_skip = (2,5)
         self.repeat_action_prob = 0.
-        self.base_address = config.base_address
-        
-        # 게임 실행
-        open_game()
-        
+
         # 윈도우 이름과 handler 받아오기
         _, self.window_name, self.handler = get_window()
         
         # state, action, memory_reader 정의
-        self.state = State(self.handler, config)
+        self.state = State(self.handler, 
+                           config.base_address, 
+                           config.image_size)
         self.com_score = 0
         self.my_score = 0
-        self.action = Action(config)
+        self.action = Action(self.window_name, config.interval_time)
         
         # rendering
         self.viewer = None
@@ -61,7 +59,7 @@ class PikaEnv(gym.Env):
             info : 부가적인 정보
         """
         reward = 0.0
-        num_steps = np.random.randint(self.frameskip[0], self.frameskip[1])
+        num_steps = np.random.randint(self.frame_skip[0], self.frame_skip[1])
 
         # do action and get reward
         for _ in range(num_steps):
@@ -101,6 +99,13 @@ class PikaEnv(gym.Env):
         else:
             reward = 0
         return reward
+    
+    def reset_game(self):
+        self.action.reset_game()
+        
+    def start_game(self):
+        self.action.start_game()
+        
 
 register(
     id="PikaSmall-v5", 

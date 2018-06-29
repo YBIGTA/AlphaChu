@@ -4,10 +4,10 @@ import time
 import win32com.client as client
 
 class Action:
-    def __init__(self, config):
+    def __init__(self, window_name, interval_time):
         self.shell = client.Dispatch('WScript.Shell')
-        self.window_name = config.window_name
-        self.interval_time = config.interval_time
+        self.window_name = window_name
+        self.interval_time = 0
         self.key_map = {0: 0x0D, # enter
                         1: 0x26, # up arrow
                         2: 0x28, # down arrow
@@ -109,6 +109,7 @@ class Action:
     def start_game(self):
         # Activate pika window
         self.shell.AppActivate(self.window_name)
+        time.sleep(0.2)
         for _ in range(3):
             win32api.keybd_event(self.key_map[0], 0, 0, 0) # enter down
             time.sleep(0.1)
@@ -119,15 +120,16 @@ class Action:
     def reset_game(self):
         # Activate pika window
         self.shell.AppActivate(self.window_name)
+        time.sleep(0.5)
         win32api.keybd_event(0x12, 0, 0, 0) # alt
-        time.sleep(self.interval_time)
-        win32api.keybd_event(0x47, 0, 0, 0) # g
-        time.sleep(self.interval_time)
-        win32api.keybd_event(0x52, 0, 0, 0) # r
         time.sleep(self.interval_time)
         win32api.keybd_event(0x12, 0, win32con.KEYEVENTF_KEYUP, 0) # alt
         time.sleep(self.interval_time)
+        win32api.keybd_event(0x47, 0, 0, 0) # g
+        time.sleep(self.interval_time)
         win32api.keybd_event(0x47, 0, win32con.KEYEVENTF_KEYUP, 0) # g
+        time.sleep(self.interval_time)
+        win32api.keybd_event(0x52, 0, 0, 0) # r
         time.sleep(self.interval_time)
         win32api.keybd_event(0x52, 0, win32con.KEYEVENTF_KEYUP, 0) # r
         time.sleep(self.interval_time)
@@ -136,19 +138,20 @@ class Action:
     def set_speed(self):
         # alt + c + s + h
         self.shell.AppActivate(self.window_name)
+        time.sleep(0.2)
         win32api.keybd_event(0x12, 0, 0, 0) # alt
-        time.sleep(self.interval_time)
-        win32api.keybd_event(0x43, 0, 0, 0) # c
-        time.sleep(self.interval_time)
-        win32api.keybd_event(0x53, 0, 0, 0) # s
-        time.sleep(self.interval_time)
-        win32api.keybd_event(0x48, 0, 0, 0) # h
         time.sleep(self.interval_time)
         win32api.keybd_event(0x12, 0, win32con.KEYEVENTF_KEYUP, 0) # alt
         time.sleep(self.interval_time)
+        win32api.keybd_event(0x43, 0, 0, 0) # c
+        time.sleep(self.interval_time)
         win32api.keybd_event(0x43, 0, win32con.KEYEVENTF_KEYUP, 0) # c
         time.sleep(self.interval_time)
+        win32api.keybd_event(0x53, 0, 0, 0) # s
+        time.sleep(self.interval_time)
         win32api.keybd_event(0x53, 0, win32con.KEYEVENTF_KEYUP, 0) # s
+        time.sleep(self.interval_time)
+        win32api.keybd_event(0x48, 0, 0, 0) # h
         time.sleep(self.interval_time)
         win32api.keybd_event(0x48, 0, win32con.KEYEVENTF_KEYUP, 0) # h
         time.sleep(self.interval_time)
