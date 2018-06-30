@@ -58,6 +58,15 @@ class PikaEnv(gym.Env):
         self.ale.loadROM(self.game_path)
         return [seed1, seed2]
     
+    def get_states(self):
+        observation = self.state.get_state()
+
+        previous_frames = np.array(self.state_buffer)
+        s_t1 = np.zeros((3, 84, 84))
+        s_t1[:2, :] = previous_frames
+        s_t1[2, :] = observation
+        return np.moveaxis(s_t1, 0, -1)
+    
     def step(self, key_num):
         """
         :param key_num: 입력할 액션 값
@@ -68,18 +77,16 @@ class PikaEnv(gym.Env):
             done : 게임(or episode)가 종료되었는 지의 여부
             info : 부가적인 정보
         """
-        reward = 0.0
         num_steps = np.random.randint(self.frame_skip[0], self.frame_skip[1])
 
         # do action and get reward
         for _ in range(1):
             self.action.send_key(key_num)
-            reward += self.get_reward()
 
         observation = self.state.get_state()
 
         previous_frames = np.array(self.state_buffer)
-        s_t1 = np.empty((3, 84, 84))
+        s_t1 = np.zeros((3, 84, 84))
         s_t1[:2, :] = previous_frames
         s_t1[2, :] = observation
 
@@ -88,7 +95,7 @@ class PikaEnv(gym.Env):
         self.state_buffer.append(observation)
         
         flag = self.state.is_over()
-        return np.moveaxis(s_t1, 0, -1), reward, flag, {"com_score": self.com_score, 
+        return np.moveaxis(s_t1, 0, -1), 0, flag, {"com_score": self.com_score, 
                                                            "my_score": self.my_score}
     
     def render(self, mode='human'):
@@ -120,8 +127,11 @@ class PikaEnv(gym.Env):
         else:
             reward = 0
         return reward
+ 
     
     def reset_game(self):
+        self.com_score = 0
+        self.my_score = 0
         self.action.reset_game()
         
     def start_game(self):
